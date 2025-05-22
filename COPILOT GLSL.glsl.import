@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://by11iup8o5ifr"
+path="res://.godot/imported/COPILOT GLSL.glsl-d0a6c1f4d6e62a01e7156962770f7b67.res"
+
+[deps]
+
+source_file="res://COPILOT GLSL.glsl"
+dest_files=["res://.godot/imported/COPILOT GLSL.glsl-d0a6c1f4d6e62a01e7156962770f7b67.res"]
+
+[params]
+
