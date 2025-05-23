@@ -14,5 +14,6 @@ void main() {
     imageStore(out_image, pixel_coords, vec4(1.0, 0.0, 0.0, 1.0));
     
     // Alternatively, if your image is treated as an integer image, use:
-    // imageStore(out_image, pixel_coords, ivec4(255, 0, 0, 255));
+	// El Blobo : Yeeaaaah, I won't use that one if i were you.
+    //imageStore(out_image, pixel_coords, ivec4(255, 0, 0, 255));
 }
