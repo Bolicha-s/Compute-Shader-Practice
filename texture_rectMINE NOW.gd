@@ -49,6 +49,7 @@ func _ready():
 	sampler.add_id(output_texture_rid)
 	uniforms.append(sampler)
 	
+	#BELOW IS SETTING UP SAMPLERS (IMAGES)
 	var canvas_sampler : RDUniform = RDUniform.new()
 	canvas_sampler.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	canvas_sampler.binding = 1 # As declared in the shader (binding = 1)
@@ -67,17 +68,13 @@ func _ready():
 	buffer_sampler.add_id(output_texture_rid)
 	uniforms.append(buffer_sampler)
 	
+	
+	#BELOW IS SETTING UP A UNIFORM BLOCK
 	var input := PackedFloat32Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 	var testFloat = 5.5
 	var input_bytes := input.to_byte_array()
 	
-	#Create a storage buffer that can hold our float values
-	#var buffer : RID = rd.storage_buffer_create(input_bytes.size(), input_bytes)
-	#var exampleUniform := RDUniform.new()
-	#exampleUniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-	#exampleUniform.binding = 4
-	#exampleUniform.add_id(buffer)
-	#uniforms.append(exampleUniform)
+
 	var uniform_block := PackedFloat32Array()
 	uniform_block.push_back(testFloat)
 	for i in input:
@@ -93,56 +90,7 @@ func _ready():
 	exampleUniform.add_id(buffer)
 	bufferHolder = buffer
 	uniforms.append(exampleUniform)
-### BELOW IS GITHUB COPILOT
 
-	## Prepare your data in the same order and alignment as in the shader
-	#var params = PackedFloat32Array()
-	#var brush_angle = 0.0
-	#var mouse_position = get_local_mouse_position()
-	#var canvas_position = Vector2(0.0,0.0)
-	#var canvas_size = Vector2(0.0,0.0) 
-	#var canvas_angle = 0.0
-	#var opacity_multiplier = 0.0
-	#var draw_active = true
-	#var brush_size = Vector2(0.0,0.0)
-	#
-	#params.append(brush_angle)
-	#params.append(mouse_position.x)
-	#params.append(mouse_position.y)
-	#params.append(canvas_position.x)
-	#params.append(canvas_position.y)
-	#params.append(canvas_size.x)
-	#params.append(canvas_size.y)
-	#params.append(canvas_angle)
-	#params.append(opacity_multiplier)
-	#params.append(draw_active) # bool as float
-	#params.append(brush_size.x)
-	#params.append(brush_size.y)
-#
-	#var params_bytes = params.to_byte_array()
-	#
-	##create a storage buffer that can hold our float values
-	##Each float has 4 bytes 32 bit so 4 x 8 = 32 bytes
-	##Below OG what buffer := rd, but AI suggested buffer: RID = rd
-	#var buffer: RID = rd.storage_buffer_create(params_bytes.size(), params_bytes)
-	#
-	#
-	#var ubo_uniform := RDUniform.new()
-	##PREVIOUSLY BELOW WAS TYPE STORAGE BUFFER
-	#ubo_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-	#ubo_uniform.binding = 4
-	#ubo_uniform.add_id(buffer)
-	#var uniform_set :RID = rd.uniform_set_create([ubo_uniform], shader, 0)
-	
-	#uniforms.append(ubo_uniform)
-	
-	
-	
-	#var params_uniform := RDUniform.new()
-	#params_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_UNIFORM_BUFFER
-	#params_uniform.binding = 4
-	#params_uniform.add_id(buffer)
-	#uniforms.append(params_uniform)
 		
 		# And the uniform set.
 	uniform_set = rd.uniform_set_create(uniforms, shader, 0) # Let set shader_set to 0 for now.
