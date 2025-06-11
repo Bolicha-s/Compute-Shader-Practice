@@ -9,10 +9,10 @@ layout(set = 0, binding = 2, rgba8) uniform readonly image2D brush_texture;     
 layout(set = 0, binding = 3, rgba8) uniform readonly image2D buffer_texture;    //BUFFER
 
 
-layout(set = 0, binding = 4, std430) buffer MyDataBuffer{
-    float data[];
-}
-my_data_buffer;
+layout(set = 0, binding = 4, std430) buffer UniformBlock{
+    float testFloat;
+    float testInput[10];
+};
 
 
 
@@ -62,6 +62,11 @@ void main() {
 
        color = plus_one_for_evens(color);
     }
+
+    if (gl_GlobalInvocationID.x == 0 && gl_GlobalInvocationID.y == 0) {
+    testFloat = testFloat * 2.0;
+    }
+
     
     // Write the red color.
     // If using normalized floats for an rgba8 image:

@@ -3,6 +3,8 @@ extends TextureRect
 # Global variables for clarity.
 var rd                # RenderingDevice instance.
 var output_texture_rid  # The low-level texture RID created via RenderingServer.
+var bufferHolder
+
 
 @onready var shader : RID
 @onready var uniform_set : RID
@@ -37,7 +39,7 @@ func _ready():
 	(texture as Texture2DRD).texture_rd_rid = output_texture_rid
 
 	# Load the compute shader resource. Save your shader as a .rsh file.
-	shader = _init_shader("res://COMPUTE TEST MINE NOW.glsl")
+	shader = _init_shader("res://COMPUTE TEST MINE NOW.glsl")    
 	assert(shader.is_valid())
 	# Create the sampler uniform.
 	var uniforms : Array[RDUniform] = []
@@ -70,14 +72,27 @@ func _ready():
 	var input_bytes := input.to_byte_array()
 	
 	#Create a storage buffer that can hold our float values
-	var buffer : RID = rd.storage_buffer_create(input_bytes.size(), input_bytes)
+	#var buffer : RID = rd.storage_buffer_create(input_bytes.size(), input_bytes)
+	#var exampleUniform := RDUniform.new()
+	#exampleUniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
+	#exampleUniform.binding = 4
+	#exampleUniform.add_id(buffer)
+	#uniforms.append(exampleUniform)
+	var uniform_block := PackedFloat32Array()
+	uniform_block.push_back(testFloat)
+	for i in input:
+		uniform_block.push_back(i)
+		
+	var uniform_bytes := uniform_block.to_byte_array()
+	
+	var buffer : RID = rd.storage_buffer_create(uniform_bytes.size(), uniform_bytes)
+	
 	var exampleUniform := RDUniform.new()
 	exampleUniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
 	exampleUniform.binding = 4
 	exampleUniform.add_id(buffer)
+	bufferHolder = buffer
 	uniforms.append(exampleUniform)
-	
-	
 ### BELOW IS GITHUB COPILOT
 
 	## Prepare your data in the same order and alignment as in the shader
@@ -142,6 +157,18 @@ func _input(event : InputEvent) -> void:
 		if kev.pressed and (not kev.echo) and kev.keycode == KEY_SPACE:
 			# Run the shader on space bar hit. Will execute the shader and change the texels to red.
 			RenderingServer.call_on_render_thread(_run_shader)
+			
+	#var output_testFloat_bytes : RID = rd.buffer_get_data(bufferHolder)
+	
+		var output_bytes = rd.buffer_get_data(bufferHolder)
+		var num_floats = output_bytes.size() / 4  # each float is 4 bytes
+		var output = PackedFloat32Array()
+		for i in range(num_floats):
+			output.append(output_bytes.decode_float(i * 4))
+			
+		print(output[0]) 
+	
+
 
 func _run_shader() -> void:
 	var render_list : int = rd.compute_list_begin()
