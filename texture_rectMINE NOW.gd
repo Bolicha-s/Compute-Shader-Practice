@@ -130,7 +130,7 @@ func _create_image_filled_with_color(sz : Vector2i, color : Color) -> PackedByte
 	var res : PackedByteArray = PackedByteArray()
 	res.resize(count * 4)
 	for i : int in range(count):
-		var o : int = i * 4
+		var o : int = i * 4  
 		res[o] = color.r8; res[o + 1] = color.g8; res[o + 2] = color.b8; res[o + 3] = color.a8
 	return res
 
